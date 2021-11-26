@@ -1,25 +1,37 @@
+
+import {Todo} from '../modal/todo';
+
+
 //Here we define four actions for CRUD operations respectively
 
-//Read
+//Read data
 export class GetUsers {
-    static readonly type = '[Users] Fetch';
+    static readonly type = '[User] Get';
 }
 
-//Create
+//Create data 
 export class AddUsers {
-    static readonly type = '[Users] Add';
+    static readonly type = '[User] Add';
     constructor(public payload: any) { }
 }
 
-//Update
+//Update data 
 export class UpdateUsers {
-    static readonly type = '[Users] Update';
-    constructor(public payload: any, public id: number, public i:number) { }
+    static readonly type = '[User] Update';
+    constructor(public payload: Todo, public id: number ) { }
 }
 
-//Delete
+//Delete data
 export class DeleteUsers {
-    static readonly type = '[Users] Delete';
+    static readonly type = '[User] Delete';
     constructor(public id: number) { }
 }
 
+
+// select data 
+export class SetSelectedTodo {
+    static readonly type = '[Todo] Set';
+
+    constructor(public payload: Todo) {
+    }
+}

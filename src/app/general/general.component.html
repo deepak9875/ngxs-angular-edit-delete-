@@ -5,20 +5,29 @@
       <h5 style="color: grey;">Add new user to State</h5>
       <form [formGroup]="userForm" (ngSubmit)="addUser()">
         <label class="form-label">ID</label>
-        <input type="text" class="form-control mb-2" placeholder="User ID" formControlName="id">
+        <input type="text" class="form-control mb-2" placeholder="User ID" formControlName="id" #id />
         <label class="form-label">Name</label>
-        <input type="text" class="form-control mb-2" placeholder="Enter Name" formControlName="name">
+        <input type="text" class="form-control mb-2" placeholder="Enter Name" formControlName="name" #name />
         <label class="form-label">Username</label>
-        <input type="text" class="form-control mb-2" placeholder="Enter a unique username" formControlName="username">
+        <input type="text" class="form-control mb-2" placeholder="Enter a unique username" formControlName="username"
+          #username />
         <label class="form-label">Email</label>
-        <input type="email" class="form-control mb-2" placeholder="example@abcd.com" formControlName="email">
+        <input type="email" class="form-control mb-2" placeholder="example@abcd.com" formControlName="email" #email />
         <label class="form-label">Phone</label>
-        <input type="number" class="form-control mb-2" placeholder="Enter Contact No." formControlName="phone">
+        <input type="number" class="form-control mb-2" placeholder="Enter Contact No." formControlName="phone" #phone />
         <label class="form-label">Website</label>
-        <input type="email" class="form-control mb-2" placeholder="Enter website name" formControlName="website">
-        <button type="submit" class="btn btn-primary btn-sm mt-2">Add User</button>
+        <input type="email" class="form-control mb-2" placeholder="Enter website name" formControlName="website"
+          #website />
+        <div class="mt-5">
+          <button type="submit" class="btn btn-primary   me-2" [disabled]="userForm.pristine || userForm.invalid">Add
+            User</button>
+          <button class="btn btn-primary " (click)="clearFormData()"
+            [disabled]="userForm.pristine || userForm.invalid">Clear</button>
+        </div>
       </form>
     </div>
+
+
     <div class="col-md-9">
       <h5 style="color: grey;">User Information</h5>
       <table class="table">
@@ -35,14 +44,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let contents of userInfo; index as i">
+          <tr *ngFor="let contents of users | async">
             <th scope="row">{{contents.id}}</th>
             <td>{{contents.name}}</td>
             <td>{{contents.username}}</td>
             <td>{{contents.email}}</td>
             <td>{{contents.phone}}</td>
             <td>{{contents.website}}</td>
-            <td><button class="btn btn-outline-warning btn-sm" (click)="updateUser(contents.id,i)"><i
+            <td><button class="btn btn-outline-warning btn-sm" (click)="updateUser(contents)"><i
                   class="bi bi-pencil-fill"></i></button></td>
             <td><button class="btn btn-danger btn-sm" (click)="deleteUser(contents.id)"><i
                   class="bi bi-trash-fill"></i></button></td>
@@ -50,5 +59,7 @@
         </tbody>
       </table>
     </div>
+
+
   </div>
 </div>

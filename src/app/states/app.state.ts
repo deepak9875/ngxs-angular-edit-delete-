@@ -2,16 +2,19 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { DesignutilityService } from "../designutility.service";
 import { tap } from 'rxjs/operators';
-import { AddUsers, DeleteUsers, GetUsers, UpdateUsers } from "../actions/app.action";
+import { AddUsers, DeleteUsers, GetUsers, SetSelectedTodo, UpdateUsers } from "../actions/app.action";
+import {Todo} from '../modal/todo';
 
 export class UserStateModel {
     users: any
+    user:any
 }
 
 @State<UserStateModel>({
     name: 'appstate',
     defaults: {
-        users: []
+        users: [],
+        user: null
     }
 })
 
@@ -19,9 +22,17 @@ export class UserStateModel {
 export class AppState {
     constructor(private _du: DesignutilityService) { }
 
+
+
     @Selector()
     static selectStateData(state:UserStateModel){
         return state.users;
+    }
+
+
+     @Selector()
+    static getStateData(state:UserStateModel){
+        return state.user;
     }
     
     @Action(GetUsers)
@@ -47,18 +58,21 @@ export class AppState {
     }
 
     @Action(UpdateUsers)
-    updateDataOfState(ctx: StateContext<UserStateModel>, { payload, id, i }: UpdateUsers) {
-        return this._du.updateUser(payload, i).pipe(tap(returnData => {
+    updateDataOfState(ctx: StateContext<UserStateModel>, { payload, id, }: UpdateUsers) {
+        return this._du.updateUser(payload, id).pipe(tap(returnData => {
             const state=ctx.getState();
 
             const userList = [...state.users];
-            userList[i]=payload;
+            // userList[i]=payload;
+            const userIndex = userList.findIndex(item=>item.id === id);
+        userList[userIndex] = returnData;
             
             ctx.setState({
                 ...state,
                 users: userList,
             });
         }))
+        
     }
 
     @Action(DeleteUsers)
@@ -74,5 +88,15 @@ export class AppState {
                 users:filteredArray
             })
         }))
+    }
+
+
+    @Action(SetSelectedTodo)
+    selectDataFromState({getState, setState}: StateContext<UserStateModel>, {payload}: SetSelectedTodo) {
+        const state = getState();
+        setState({
+            ...state,
+            user: payload
+        });
     }
 }
